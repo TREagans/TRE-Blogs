@@ -29,7 +29,7 @@ router.post('/register', async (req, res) => {
 
       // send response
       res.json({
-        success: false,
+        success: true,
         message: 'User created successfully',
       });
 

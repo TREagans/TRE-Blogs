@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import Button from '../../components/Button';
 import { loginUser } from '../../services/userService';
@@ -12,9 +13,34 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const response = await loginUser(user);
-      alert(response.message);
+
+      if (response.success) {
+
+        // display success toast
+        toast.success(response.message, {
+          style: {
+            background: 'green',
+            color: '#fff',
+          },
+        });
+
+        // clear form fields
+        setUser({ email: '', password: '' });
+      } else {
+        toast.error(response.message, {
+          style: {
+            background: '#990000',
+            color: '#fff',
+          },
+        });
+      }
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message, {
+        style: {
+          background: '#990000',
+          color: '#fff',
+        },
+      });
     }
   };
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
 import { registerUser } from '../../services/userService';
 
@@ -9,13 +10,41 @@ const Register = () => {
     email: '',
     password: '',
   });
+  const navigate = useNavigate();
 
   const handleRegister = async () => {
     try {
       const response = await registerUser(user);
-      alert(response.message);
+
+      if (response.success) {
+        toast.success(response.message, {
+          style: {
+            background: 'green',
+            color: '#fff',
+          },
+        });
+
+        // clear form fields
+        setUser({ name: '', email: '', password: '' });
+
+        // navigate the user to the login screen
+        navigate('/login');
+      } else {
+        toast.error(response.message, {
+          style: {
+            background: '#990000',
+            color: '#fff',
+          },
+        });
+      }
+
     } catch (error) {
-      alert(error.message);
+      toast.success(error.message, {
+        style: {
+          background: '#990000',
+          color: '#fff',
+        },
+      });
     }
   };
 
