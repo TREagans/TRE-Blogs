@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
-import { loginUser } from '../../services/userService';
+import { LoginUser } from '../../services/userService';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     email: '',
     password: '',
@@ -12,9 +13,12 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await loginUser(user);
+      const response = await LoginUser(user);
 
       if (response.success) {
+
+        // store the token sent from backend into local storage
+        localStorage.setItem('token', response.data);
 
         // display success toast
         toast.success(response.message, {
@@ -26,6 +30,9 @@ const Login = () => {
 
         // clear form fields
         setUser({ email: '', password: '' });
+
+        // navigate logged in user to home page
+        window.location.href = '/';
       } else {
         toast.error(response.message, {
           style: {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
-import { registerUser } from '../../services/userService';
+import { RegisterUser } from '../../services/userService';
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -14,7 +14,7 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
-      const response = await registerUser(user);
+      const response = await RegisterUser(user);
 
       if (response.success) {
         toast.success(response.message, {

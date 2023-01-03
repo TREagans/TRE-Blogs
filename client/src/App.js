@@ -5,16 +5,25 @@ import { Toaster } from 'react-hot-toast';
 import Home from './pages/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
     <div>
       {/* the toast will display at top center of every page */}
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster position='top-center' reverseOrder={false} />
 
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Home />} />
+          {/* making the home route protected */}
+          <Route
+            path='/'
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
         </Routes>

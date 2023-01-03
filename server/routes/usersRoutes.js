@@ -3,6 +3,8 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const authMiddleware = require('../middleware/authMiddleware');
+
 // register - POST => api/users/register
 router.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
@@ -40,7 +42,7 @@ router.post('/register', async (req, res) => {
       });
     }
 
-  });
+});
 
 // login - POST => api/users/login
 router.post('/login', async (req, res) => {
@@ -82,10 +84,7 @@ router.post('/login', async (req, res) => {
       res.json({
         success: true,
         message: 'User logged in successfully',
-        data: { 
-            token,
-            email: userExist.email 
-        }
+        data: token
       });
 
     } catch (error) {
@@ -94,6 +93,24 @@ router.post('/login', async (req, res) => {
         message: error.message,
       });
     }
-  });
+});
+
+// getuser - GET => api/users/getuser
+router.get('/getuser', authMiddleware, async (req, res) => {
+  try {
+    // excluding multiple fields from the user's data using select()
+    const user = await User.findById(req.body.userId).select('-password -__v');
+    res.json({
+      success: true,
+      message: 'User profile fetched successfully!',
+      data: user
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
 
 module.exports = router;
